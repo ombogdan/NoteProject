@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { createStyles } from "shared/theme/createStyles";
 
-export const useStyles = createStyles(({ value, error, scale, theme }: any) =>
+export const useStyles = createStyles(({ value, error, scale, theme, multiline }: any) =>
   StyleSheet.create({
     container: {
       flexDirection: "column",
@@ -10,11 +10,11 @@ export const useStyles = createStyles(({ value, error, scale, theme }: any) =>
       width: "100%",
       paddingHorizontal: scale(15),
       paddingVertical: scale(12),
-      height: scale(68)
+      height:  multiline ? scale(220) : scale(68),
     },
     input: {
       fontSize: scale(15),
-      height: scale(22),
+      height: multiline ? scale(200) : scale(22),
       margin: 0,
       padding: 0,
       width: '100%',

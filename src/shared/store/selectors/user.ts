@@ -7,3 +7,8 @@ export const selectIsUserAuthedStatus = createSelector(
   (userStore) => userStore.authed,
 );
 
+export const selectNotesList = createSelector(
+  [selectUserStore],
+  (userStore) => userStore.notesList,
+);
+

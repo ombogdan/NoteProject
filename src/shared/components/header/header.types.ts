@@ -1,4 +1,3 @@
 export interface CustomHeaderProps {
-  onResetChat: () => void;
-  isLoading: boolean;
+  name?: string;
 }

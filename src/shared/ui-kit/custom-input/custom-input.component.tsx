@@ -12,9 +12,10 @@ const CustomInput = ({
                        styleContainer,
                        styleInput,
                        placeholder,
-                       keyboardType = "default"
+                       keyboardType = "default",
+                       multiline
                      }: CustomInputProps) => {
-  const styles = useStyles({ value, error: errorMessage });
+  const styles = useStyles({ value, error: errorMessage, multiline });
   const { theme } = useTheme();
 
   return (
@@ -34,6 +35,8 @@ const CustomInput = ({
           secureTextEntry={keyboardType === 'visible-password'}
           keyboardType={keyboardType}
           placeholder={placeholder}
+          multiline={multiline}
+          textAlignVertical={multiline ? 'top' : 'center'}
           placeholderTextColor={theme.palette.textDefaultTransparent}
         />
       </View>

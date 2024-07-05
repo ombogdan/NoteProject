@@ -2,24 +2,46 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   authed: false,
-  notesList: []
+  notesList: [],
+  userName: ""
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    userLogin(state) {
+    userLogin(state, { payload }) {
       state.authed = true;
+      if (payload) {
+        state.userName = payload;
+      }
     },
     userLogout(state) {
       state.authed = false;
     },
-    setNotes(state, { payload }) {
+    updateNotes(state, { payload }) {
       if (payload) {
         state.notesList = payload;
       }
+    },
+    addNotes(state, { payload }) {
+      if (payload) {
+        // @ts-ignore
+        const existingIndex = state.notesList.findIndex(note => note.id === payload.id);
+        if (existingIndex !== -1) {
+          // @ts-ignore
+          state.notesList[existingIndex] = { ...state.notesList[existingIndex], ...payload };
+        } else {
+          // @ts-ignore
+          state.notesList = [...state.notesList, payload];
+        }
+      }
+    },
+    deleteNoteById(state, { payload }: { payload: number }) {
+      // @ts-ignore
+      state.notesList = state.notesList.filter(note => note.id !== payload);
     }
+
   }
 });
 

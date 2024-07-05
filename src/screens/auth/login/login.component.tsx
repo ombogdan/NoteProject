@@ -41,7 +41,7 @@ const LoginScreen = () => {
     try {
       setTimeout(async () => {
         await asyncStorageService.setAccessToken("apiUserLoginRes.data.access_token");
-        dispatch(userActions.userLogin());
+        dispatch(userActions.userLogin(userName));
         setIsLoading(false);
       }, 1400);
     } catch (error) {

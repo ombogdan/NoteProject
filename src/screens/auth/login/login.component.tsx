@@ -1,29 +1,33 @@
 import React, { useState } from "react";
 
-import { Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import CustomInput from "ui-kit/custom-input/custom-input.component";
 import { CustomButton } from "ui-kit/custom-button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useTypedDispatch } from "store/index";
 import { useStyles } from "./login.styles";
+import { asyncStorageService } from "services/async-storage-service";
+import { userActions } from "store/slices/user";
 
 const LoginScreen = () => {
   const styles = useStyles();
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const dispatch = useTypedDispatch();
-
-  const handleGoLogin = () => {
-  };
-
 
   const handleValidation = () => {
     let isValid = true;
-    // if (!emailRegexp.test(email)) {
-    //   setEmailError("Please enter valid email address");
-    //   isValid = false;
-    // }
+    if (userName.length < 2) {
+      setUsernameError("Please enter minimum 2 characters");
+      isValid = false;
+    }
+    if (password.length < 6) {
+      setPasswordError("Please enter minimum 6 characters");
+      isValid = false;
+    }
 
     return isValid;
   };
@@ -35,38 +39,15 @@ const LoginScreen = () => {
     }
     setIsLoading(true);
     try {
-      // await api.auth.login({ email });
-      setIsLoading(false);
+      setTimeout(async () => {
+        await asyncStorageService.setAccessToken("apiUserLoginRes.data.access_token");
+        dispatch(userActions.userLogin());
+        setIsLoading(false);
+      }, 1400);
     } catch (error) {
       setIsLoading(false);
       // @ts-ignore
-      setEmailError(error?.response?.data?.message ?? "");
-    }
-  };
-
-  const handleSubmitCode = async () => {
-    const isValidForm = handleValidation();
-    if (!isValidForm) {
-      return;
-    }
-    let apiUserMeRes;
-    let apiUserLoginRes;
-    setIsLoading(true);
-    try {
-      // apiUserLoginRes = await api.auth.checkCode({ email, code: codeVerification });
-      // await asyncStorageService.setAccessToken(apiUserLoginRes.data.access_token);
-
-      try {
-        // apiUserMeRes = await api.auth.getMe();
-      } catch (error) {
-        return Promise.reject(error);
-      }
-      // dispatch(userActions.userLogin(apiUserMeRes.data));
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      // @ts-ignore
-      // setCodeVerificationError(error?.response?.data?.message ?? "");
+      setUsernameError(error?.response?.data?.message ?? "");
     }
   };
 
@@ -77,22 +58,37 @@ const LoginScreen = () => {
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
       scrollEnabled>
-      <View>
+      <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>{"WelcomeBack"}</Text>
         </View>
-        <View style={styles.nameInputContainer}>
-          <CustomInput
-            name="Username"
-            value={userName}
-            onChangeValue={(value: string) => {
-              setEmailError("");
-              setUserName(value);
-            }}
-            keyboardType="email-address"
-            placeholder="tom@gmail.com"
-            errorMessage={emailError}
-          />
+        <View>
+          <View style={styles.nameInputContainer}>
+            <CustomInput
+              name="Username"
+              value={userName}
+              onChangeValue={(value: string) => {
+                setUsernameError("");
+                setUserName(value);
+              }}
+              keyboardType="email-address"
+              placeholder="tom@gmail.com"
+              errorMessage={usernameError}
+            />
+          </View>
+          <View style={styles.nameInputContainer}>
+            <CustomInput
+              name="Password"
+              value={password}
+              onChangeValue={(value: string) => {
+                setPasswordError("");
+                setPassword(value);
+              }}
+              keyboardType="visible-password"
+              placeholder="****"
+              errorMessage={passwordError}
+            />
+          </View>
         </View>
         <View style={styles.signUpButton}>
           <CustomButton
@@ -101,7 +97,7 @@ const LoginScreen = () => {
             onPress={handleLogin}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </KeyboardAwareScrollView>
   );
 };

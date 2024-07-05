@@ -31,6 +31,7 @@ const CustomInput = ({
           style={styles.input}
           onChangeText={onChangeValue}
           value={value}
+          secureTextEntry={keyboardType === 'visible-password'}
           keyboardType={keyboardType}
           placeholder={placeholder}
           placeholderTextColor={theme.palette.textDefaultTransparent}

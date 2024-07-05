@@ -11,15 +11,20 @@ import { userActions } from "store/slices/user";
 import { goBack } from "shared/navigation/root-navigator.config";
 
 export const AddNoteScreen = ({ route }: any) => {
-  const { note } = route.params;
+  const { note } = route?.params ?? {};
   const styles = useStyles();
   const dispatch = useTypedDispatch();
   const [description, setDescription] = useState(note?.description ?? "");
   const [noteText, setNoteText] = useState(note?.note ?? "");
+  const [noteError, setNoteError] = useState("");
 
   const handleSaveData = () => {
+    if(noteText===""){
+      setNoteError("Please enter text");
+      return;
+    }
     dispatch(userActions.addNotes({
-      id: note ? note.id : new Date().getTime(),
+      id: note.id ? note.id : new Date().getTime(),
       lastUpdate: new Date().getTime(),
       description,
       note: noteText
@@ -50,9 +55,11 @@ export const AddNoteScreen = ({ route }: any) => {
                 value={noteText}
                 onChangeValue={(value: string) => {
                   setNoteText(value);
+                  setNoteError("");
                 }}
                 placeholder="Note..."
                 multiline
+                errorMessage={noteError}
               />
             </View>
           </View>

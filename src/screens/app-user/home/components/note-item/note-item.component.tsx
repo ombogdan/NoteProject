@@ -10,7 +10,7 @@ export const NoteItem = ({ noteItem, onDeleteItem, onEditItem }: NoteItemTypes) 
   return (
     <>
       <View style={styles.noteContainer}>
-        <Text style={styles.description}>{description}</Text>
+        {description && <Text style={styles.description}>{description}</Text>}
         <Text style={styles.mainText}>{note}</Text>
       </View>
       <TouchableOpacity

@@ -9,10 +9,11 @@ import { selectNotesList } from "store/selectors/user";
 import { NoteItem } from "screens/app-user/home/components/note-item";
 import { userActions } from "store/slices/user";
 import { useStyles } from "./home.styles";
+import fieldSort from "utils/fieldSort";
 
 export const HomeScreen = () => {
   const styles = useStyles();
-  const notesList = useTypedSelector(selectNotesList);
+  const notesList = fieldSort(useTypedSelector(selectNotesList), ['lastUpdate'], true);
   const dispatch = useTypedDispatch();
 
   const handleAddNote = (note: any) => {
@@ -29,7 +30,7 @@ export const HomeScreen = () => {
         data={notesList}
         keyExtractor={(item) => `note_item_${item.id}`}
         ListFooterComponent={<View style={{ height: 150 }} />}
-        renderItem={({ item }) => (
+        renderItem={({ item }: any) => (
           <NoteItem
             noteItem={item}
             onDeleteItem={handleDeleteItem}

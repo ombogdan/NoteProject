@@ -12,3 +12,8 @@ export const selectNotesList = createSelector(
   (userStore) => userStore.notesList,
 );
 
+export const selectUserName = createSelector(
+  [selectUserStore],
+  (userStore) => userStore.userName,
+);
+
